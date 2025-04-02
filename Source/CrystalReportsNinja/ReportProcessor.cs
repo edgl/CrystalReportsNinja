@@ -2,6 +2,7 @@
 using CrystalDecisions.Shared;
 using System;
 using System.Collections.Generic;
+using System.Web;
 
 namespace CrystalReportsNinja
 {
@@ -17,6 +18,9 @@ namespace CrystalReportsNinja
         private LogWriter _logger;
 
         public ArgumentContainer ReportArguments { get; set; }
+        public bool ExportToStream { get; set; } = false;
+
+        public HttpResponse OutputHttpResponse { get; set; }
 
         /// <summary>
         /// Constructor
@@ -283,6 +287,12 @@ namespace CrystalReportsNinja
             Console.WriteLine("Completed");
         }
 
+        private void PerformOutputAsHttpResponse(HttpResponse response, String name)
+        {
+            _reportDoc.ExportToHttpResponse(ExportFormatType.PortableDocFormat, response, true, name);
+            _logger.Write(string.Format("Report exported to : {0}", _outputFilename));
+        }
+
         /// <summary>
         /// Run the Crystal Reports Exporting or Printing process.
         /// </summary>
@@ -298,7 +308,10 @@ namespace CrystalReportsNinja
                 ProcessParameters();
 
                 PerformRefresh();
-                PerformOutput();
+                if (ExportToStream)
+                    PerformOutputAsHttpResponse(OutputHttpResponse, "weeklytimesheet.pdf");
+                else
+                    PerformOutput();
             }
             catch (Exception ex)
             {
