@@ -5,7 +5,7 @@ namespace CrystalReportsNinja
 {
     public class LogWriter
     {
-        private static string _progDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\";
+        //private static string _progDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\";
         private static string _logFilename;
 
         public LogWriter(string filename)
@@ -19,10 +19,10 @@ namespace CrystalReportsNinja
             {
                 StreamWriter writer;
 
-                if (!File.Exists(_progDir + _logFilename))
-                    writer = File.CreateText(_progDir + _logFilename);
+                if (!File.Exists(_logFilename))
+                    writer = File.CreateText(_logFilename);
                 else
-                    writer = File.AppendText(_progDir + _logFilename);
+                    writer = File.AppendText(_logFilename);
 
                 string date, time;
                 date = DateTime.Now.ToString("dd-MM-yyyy");
